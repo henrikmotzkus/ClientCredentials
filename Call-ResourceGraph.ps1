@@ -39,13 +39,17 @@ $headers = @{
     'Authorization' = "Bearer $AccessToken"
 }
 
+# Put your KQL query to the body
+# https://learn.microsoft.com/en-us/azure/governance/resource-graph/first-query-rest-api
 $body = @{
         "query"= "Resources | project name, type | limit 50"
 }
 
+# Endpoint for the resource graph
 $restUri = "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2021-03-01"
 
+# call it
 $response2 = Invoke-RestMethod -Uri $restUri -Method Post -Header $headers -Body ($body|ConvertTo-Json)
 
-
+# Print it out
 $response2.data
