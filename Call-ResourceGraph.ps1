@@ -1,6 +1,6 @@
-# This script call the Microsoft Graph API to get the sharepoint root site
+# This script call the Azure management API to get the resources
 
-# Create a JSON with all the secrets 
+
 $file = Get-Content -Path .\Secrets.json | ConvertFrom-Json
 
 # AppID
@@ -21,7 +21,13 @@ $body = @{
     grant_type = "client_credentials"
     client_id = $AppClientId
     client_secret = $Secret
-    scope = "https://graph.microsoft.com/.default"
+    scope = "https://management.azure.com/.default"
+}
+
+$body = @{
+    grant_type = "client_credentials"
+    client_id = $AppClientId
+    client_secret = $Secret
 }
 
 # Call the endpoint
@@ -34,11 +40,18 @@ Write-Host  $response1.access_token
 $AccessToken = $response1.access_token
 
 # Prepare the next request 
-$headers = @{'Content-Type'="application\json";'Authorization'="Bearer $AccessToken"}
- 
-# Get Sharepoint Root site
-$apiurl = "https://graph.microsoft.com/v1.0/sites/root"
-$response2 = Invoke-RestMethod -Headers $headers -Uri $ApiUrl -Method Get
-$response2.value
-$response2.webUrl
-$response2
+$headers = @{
+    'Content-Type'='application/json'
+    'Authorization' = "Bearer $AccessToken"
+}
+
+$body = @{
+        "query"= "Resources | project name, type | limit 50"
+}
+
+$restUri = "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2021-03-01"
+
+$response2 = Invoke-RestMethod -Uri $restUri -Method Post -Header $headers -Body ($body|ConvertTo-Json)
+
+
+$response2.data
