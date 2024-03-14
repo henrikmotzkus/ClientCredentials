@@ -24,12 +24,6 @@ $body = @{
     scope = "https://management.azure.com/.default"
 }
 
-$body = @{
-    grant_type = "client_credentials"
-    client_id = $AppClientId
-    client_secret = $Secret
-}
-
 # Call the endpoint
 $response1 = Invoke-RestMethod -Method Post -Uri $uri -Body $body -ContentType "application/x-www-form-urlencoded"
 
