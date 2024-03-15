@@ -43,9 +43,7 @@ function GetSiteID {
     return $siteid
 }
 
-
-
-#get content from site id
+# Get content from site id
 function GetSiteContent {
     param (
         [string]$sitename
@@ -56,8 +54,6 @@ function GetSiteContent {
     $response5 = Invoke-RestMethod -Headers $headers -Uri $apiurl5 -Method Get
     return $response5.value.name
 }
-
-
 
 # Upload a file to  site
 function UploadFile {
@@ -73,7 +69,6 @@ function UploadFile {
     $response6 = Invoke-RestMethod -Headers $headers6 -Uri $apiurl6 -Method Put -InFile $Path
     return $response6.createdDateTime
 }
-
 
 UploadFile -Path "C:\Henrik-NonProfit-Engel.png" -SiteName "FileUpload"
 GetSiteContent -sitename "FileUpload"
