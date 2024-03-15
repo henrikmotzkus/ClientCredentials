@@ -1,4 +1,11 @@
 # This script call the Microsoft Graph API to upload a file to a sharepoint site
+# You need a Service Principal in the AAD with application permissions
+# Files.ReadWrite.all
+# Sites.Read.All
+# Sites.Selected
+#
+# Then you need to change the secrets.json file and fill in your secrets
+
 
 function GetAccessToken {
     # Create a JSON with all the secrets 
