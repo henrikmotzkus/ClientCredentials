@@ -5,8 +5,6 @@
 # Sites.Selected
 #
 # Then you need to change the secrets.json file and fill in your secrets
-
-
 function GetAccessToken {
     # Create a JSON with all the secrets 
     $file = Get-Content -Path .\Secrets.json | ConvertFrom-Json
@@ -58,6 +56,7 @@ function GetSiteContent {
     $AccessToken = GetAccessToken
     $siteid = GetSiteID -Searchterm $sitename -AccessToken $AccessToken
     $apiurl5 = "https://graph.microsoft.com/v1.0/sites/$siteid/drive/items/root/children"
+    $headers = @{'Content-Type'="application\json";'Authorization'="Bearer $AccessToken"}
     $response5 = Invoke-RestMethod -Headers $headers -Uri $apiurl5 -Method Get
     return $response5.value.name
 }
