@@ -9,12 +9,8 @@
 # https://techcommunity.microsoft.com/t5/microsoft-sharepoint-blog/develop-applications-that-use-sites-selected-permissions-for-spo/ba-p/3790476
 #
 #
-# You need the site ID first
+# You need the site ID from Sharepoint first
 #
-#
-#
-
-
 
 function GetAccessToken {
     # Create a JSON with all the secrets 
@@ -43,25 +39,6 @@ function GetAccessToken {
     return $AccessToken
 }
 
-# Not used anymore
-<#
-    function GetSiteID {
-        param (
-            [string]$Searchterm,
-            [string]$AccessToken
-        )
-        $headers = @{'Content-Type'="application\json";'Authorization'="Bearer $AccessToken"}
-        # Get site id from site. Please change the search term
-        $apiurl3 = "https://graph.microsoft.com/v1.0/sites"
-        $response3 = Invoke-RestMethod -Headers $headers -Uri $apiurl3 -Method Get
-        $array = $response3.value
-        $index = [Array]::IndexOf($array.name, $Searchterm)
-        #$index
-        $siteid = $array[$index].id
-        return $siteid
-    }
-#>
-
 # Get content from site id
 function GetSiteContent {
     param (
@@ -70,7 +47,7 @@ function GetSiteContent {
     $AccessToken = GetAccessToken
     #$sitename = "FileUpload"
     #$siteid = GetSiteID -Searchterm $sitename -AccessToken $AccessToken
-    $siteid = "motzkus.sharepoint.com,3a3fbf16-19c9-4938-b37c-4ae52431c9e5,193021de-64a7-40dd-91f9-8e8f0effd11d"
+    $siteid = $SiteId
     $apiurl5 = "https://graph.microsoft.com/v1.0/sites/$siteid/drive/items/root/children"
     $headers = @{'Content-Type'="application\json";'Authorization'="Bearer $AccessToken"}
     $response5 = Invoke-RestMethod -Headers $headers -Uri $apiurl5 -Method Get
@@ -95,5 +72,11 @@ function UploadFile {
 $file = Get-Content -Path .\Secrets.json | ConvertFrom-Json
 $siteid = $file.siteid
 
+$Pathoffile = "<PATH TO FILE TO UPOLOAD>"
+
+$uploadfile = get-item -Path $Pathoffile
+
+$uploadfile
+
 GetSiteContent -SiteId $siteid
-UploadFile -Path "C:\Users\hemotzku\OneDrive - Microsoft\Desktop\Template.xlsx" -SiteId $siteid
+UploadFile -Path $Pathoffile -SiteId $siteid

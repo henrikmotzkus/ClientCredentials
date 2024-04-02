@@ -25,9 +25,18 @@
       [String]$PlanId,
       [String]$FilePath
       )
+
+$PlanID = "5kB0Qp66aEWAJ53D5EDhP5cACndd"
+$FilePath = "C:\Users\hemotzku\OneDrive - Microsoft\Desktop\Mappe4_.xlsx"
       
 $ExcelData = Import-Excel -Path $FilePath
-Connect-MgGraph -Scopes "User.Read", "Group.ReadWrite.All", "Group.Read.All", "Tasks.Read", "Tasks.ReadWrite"
+$ExcelData
+Connect-MgGraph -Scopes "User.Read", "Group.ReadWrite.All", "Group.Read.All", "Tasks.Read", "Tasks.ReadWrite" -TenantId "24779d96-d620-49fa-8430-e0d2e6c59425"
+
+
+$ctx = Get-MgContext
+$ctx
+$ctx.Scopes
 
 function ConvertTo-HashtableFromPsCustomObject { 
     param ( 
@@ -59,7 +68,7 @@ function CreatePlannerTask {
         [string]$State
         )
         
-    $PlanId = "0PwDWSUrKUGfoXLDDE-XvpcADMgL"
+    $PlanId = "5kB0Qp66aEWAJ53D5EDhP5cACndd"
     # Create vanilla task object
     $Task = [PSCustomObject]@{
         PlanId = $PlanId
@@ -114,3 +123,4 @@ $ExcelData | foreach {
         break
     }
 }
+
